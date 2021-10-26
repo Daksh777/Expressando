@@ -19,33 +19,31 @@ mode = 'TRAIN'
 directory = 'data/'+mode+'/' #data/train/
 
 cap=cv2.VideoCapture(0)
+cap.set(3, 1280) # 3 - PROPERTY index for WIDTH
+cap.set(4, 720) # 4 - PROPERTY index for HEIGHT
 
 while True:
     _, frame = cap.read()
     frame = cv2.flip(frame, 1)
     
-    cv2.putText(frame, "Expressando - TDOC 2021", (175, 450), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (225,255,255), 1)
+    cv2.putText(frame, "GitHub: Daksh777", (900, 450), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (225,255,255), 1)
 
     count = {'rock': len(os.listdir(directory+"/rock")), 
              'paper': len(os.listdir(directory+"/paper")),
              'scissor': len(os.listdir(directory+"/scissor")),
              'none': len(os.listdir(directory+"/none"))} 
     
-    cv2.putText(frame, "MODE : "+ mode, (10, 50), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (225,255,255), 1)
-    cv2.putText(frame, "IMAGE COUNT:", (10, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (225,255,255), 1)
-    cv2.putText(frame, "ROCK : "+str(count['rock']), (10, 120), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
-    cv2.putText(frame, "PAPER : "+str(count['paper']), (10, 140), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
-    cv2.putText(frame, "SCISSORS : "+str(count['scissor']), (10, 160), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
-    cv2.putText(frame, "NONE : "+str(count['none']), (10, 180), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
+    cv2.putText(frame, "MODE : "+ mode, (900, 50), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (225,255,255), 1)
+    cv2.putText(frame, "IMAGE COUNT:", (900, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (225,255,255), 1)
+    cv2.putText(frame, "ROCK : "+str(count['rock']), (900, 120), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
+    cv2.putText(frame, "PAPER : "+str(count['paper']), (900, 140), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
+    cv2.putText(frame, "SCISSORS : "+str(count['scissor']), (900, 160), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
+    cv2.putText(frame, "NONE : "+str(count['none']), (900, 180), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
     
-    x1 = int(0.5*frame.shape[1])
-    y1 = 10
-    x2 = frame.shape[1]-10
-    y2 = int(0.5*frame.shape[1])
-    cv2.rectangle(frame, (x1-1, y1-1), (x2+1, y2+1), (255,0,0) ,3)
-    roi = frame[y1:y2, x1:x2] 
+    cv2.rectangle(frame, (100, 100), (500, 500), (255, 255, 255), 2)
+    roi = frame[100:500, 100:500]
     roi = cv2.resize(roi, (200, 200)) 
-    cv2.putText(frame, "R.O.I", (440, 350), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,225,0), 2)
+    cv2.putText(frame, "R.O.I", (270, 550), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,225,0), 2)
     cv2.imshow("Frame", frame)
 
     
