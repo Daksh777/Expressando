@@ -55,9 +55,9 @@ while True:
 
     # extract the region of image within the user rectangle
     roi = frame[100:500, 100:500]
-    roi = cv2.resize(roi, (64, 64)) 
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    roi = cv2.adaptiveThreshold(roi, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 1)
+    roi = cv2.adaptiveThreshold(roi, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 91, 1)
+    roi = cv2.resize(roi, (64, 64)) 
     roi = roi.reshape(64, 64, 1)
 
     # predict the move made
