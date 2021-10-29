@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from random import choice
 
-REV_CLASS_MAP = {
+game_moves = {
     0: "rock",
     1: "paper",
     2: "scissors",
@@ -11,7 +11,7 @@ REV_CLASS_MAP = {
 }
 
 def mapper(val):
-    return REV_CLASS_MAP[val]
+    return game_moves[val]
 
 def calculate_winner(move1, move2):
     if move1 == move2:
@@ -39,8 +39,8 @@ def calculate_winner(move1, move2):
 model = load_model("model.h5")
 
 cap = cv2.VideoCapture(0)
-cap.set(3, 1280) # 3 - PROPERTY index for WIDTH
-cap.set(4, 720) # 4 - PROPERTY index for HEIGHT
+cap.set(3, 1280) # Property for width
+cap.set(4, 720) # Property for height
 
 prev_move = None
 
@@ -48,24 +48,24 @@ while True:
     ret, frame = cap.read()
     frame = cv2.flip(frame, 1)
 
-    # rectangle for user to play
+    # User rectangle
     cv2.rectangle(frame, (100, 100), (500, 500), (255, 255, 255), 2)
-    # rectangle for computer to play
+    # Computer rectangle
     cv2.rectangle(frame, (800, 100), (1200, 500), (255, 255, 255), 2)
 
-    # extract the region of image within the user rectangle
+    # Extraction
     roi = frame[100:500, 100:500]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     roi = cv2.adaptiveThreshold(roi, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 91, 1)
     roi = cv2.resize(roi, (64, 64)) 
     roi = roi.reshape(64, 64, 1)
 
-    # predict the move made
+    # Prediction
     pred = model.predict(np.array([roi]))
     move_code = np.argmax(pred[0])
     user_move_name = mapper(move_code)
 
-    # predict the winner (human vs computer)
+    # Winner prediction
     if prev_move != user_move_name:
         if user_move_name != "none":
             computer_move_name = choice(['rock', 'paper', 'scissors'])
@@ -75,7 +75,7 @@ while True:
             winner = "Waiting..."
     prev_move = user_move_name
 
-    # display the information
+    # Display text
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(frame, "Your Move: " + user_move_name,
                 (50, 50), font, 1.2, (255, 255, 255), 2, cv2.LINE_AA)
@@ -86,12 +86,13 @@ while True:
 
     if computer_move_name != "none":
         icon = cv2.imread(
-            "images/{}.jpg".format(computer_move_name))
+            "images/{}.png".format(computer_move_name))
         icon = cv2.resize(icon, (400, 400))
         frame[100:500, 800:1200] = icon
     else:
-        icon = cv2.imread("images/none.jpg")
+        icon = cv2.imread("images/none.png")
         icon = cv2.resize(icon, (400, 400))
+        frame[100:500, 800:1200] = icon
 
     cv2.imshow("Rock Paper Scissors", frame)
 
